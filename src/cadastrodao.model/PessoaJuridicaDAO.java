@@ -40,10 +40,8 @@ public class PessoaJuridicaDAO {
     public void incluir(PessoaJuridica pessoa) throws SQLException {
         final String sqlPessoa = "INSERT INTO Pessoa(nome, logradouro, cidade, estado, telefone, email) VALUES (?,?,?,?,?,?, "J")";
         final String sqlPessoaJuridica = "INSERT INTO PessoaJuridica (idPessoaJuridica, cnpj) VALUES(?,?)";
-
         try {
             conn.setAutoCommit(false);
-
             int pessoaid = 0;
             try (PreparedStatement stPessoa = conn.prepareStatement(sqlPessoa, Statement.RETURN_GENERATED_KEYS)){
                 stPessoa.setString(1, pessoa.getNome());
@@ -52,25 +50,20 @@ public class PessoaJuridicaDAO {
                 stPessoa.setString(4, pessoa.getEstado());
                 stPessoa.setString(5, pessoa.getTelefone());
                 stPessoa.setString(6, pessoa.getEmail());
-                stPessoa.executeUpdate();
-                
+                stPessoa.executeUpdate();                
                 try(ResultSet generatedKeySet = stPessoa.getGeneratedKeys()){
                     if( generatedKeySet.next()){
                         pessoaId = generatedKeySet.getInt(1);
                     }
-                }    
-        
-        
+                }                    
                 if (pessoaId == 0){
                     throw new SQLDataException("Ops! Falha ao inserir pessoa, ID não foi gerado ou não foi encontrado, digite outro ID.");
                 }
-
                 try (preparedStatement stPessoaJuridica = conn. prepareStatement(sqlPessoaJuridica)){            
                     stPessoaPessoaJuridica.setInt(1, pessoaid);
                     stPessoaPessoaJuridica.setString(2, pessoa.getCnpj());
                     stPessoaPessoaJuridica.executeUpdate();     
-                }
-                
+                }                
                 conn.commit();
             }   
                 catch(SQLException exception) {conn.setAutoCommit(true);}
@@ -81,7 +74,6 @@ public class PessoaJuridicaDAO {
     public void alterar(PessoaJuridica pessoa) throws SQLException{
         final String sqlPessoa = "UPDATE Pessoa Set nome = ?, logradouro = ?, cidade = ?, estado = ?, telefone = ?, email = ? where idPessoa =?";
         final String sqlPessoaJuridica = "UPDATE PessoaJuridica SET cnpj =? WHERE idPessoaJuridica = ?";
-
         try{
             conn.setAutoCommit(false);
             try(preparedStatement stPessoa = conn.prepareStatement(sqlPessoa)){
@@ -94,7 +86,6 @@ public class PessoaJuridicaDAO {
                 stPessoa.setInt(7, PessoaFisicapate());
                 stPessoa.executeUpdate();
             }
-
             try(PreparedStatement stPessoaJuridica = conn.prepareStatement(sqlPessoaJuridica)){
                 stPessoaJuridica.setString(1, PessoaFisica.getCpf());
                 stPessoaJuridica.setInt(2, PessoaFisica.getId());
@@ -110,19 +101,16 @@ public class PessoaJuridicaDAO {
     public void excluir(Integer id) thorws SQLException{
         String sqlPessoaJuridica = "Delete FROM PessoaJuridica WHERE idPessoaJuridica = ?";
         String sqlPessoa = "DELETE FROM Pessoa WHERE idPessoa = ?";
-
         try{
             conn.setAutoCommit(false);
             try(PreparedStatement stPessoaFisica = conn.prepareStatement(sqlPessoaJuridica)){
                 stPessoaJuridica.setInt(1, id);
                 stPessoaJuridica.executeUpdate();
             }
-
             try(PreparedStatement stPessoa = conn.prepareStatement(sqlPessoa)){
                 stPessoa.setInt(1, id);
                 stPessoa.executeUpdate();
             }
-
             conn.commit();
         }    catch{SQLException exception} {
                 conn.rollback();

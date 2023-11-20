@@ -35,7 +35,6 @@ public class cadastroBDTeste {
             System.out.println("=================================");
             opcao = scanner.nextInt();
             scanner.nextLine();
-
             try{
                 switch(opcao){
                     case 1:
@@ -43,17 +42,14 @@ public class cadastroBDTeste {
                         char tInclusao = scanner.next().charAt(opcao);
                         scanner.nextLine();
                         if (tInclusao == "F" | tInclusao == "fi"){cadastrarPessoaFisica(pessoaFisicaDAO, scanner);}
-                        else if (tInclusao == "J" | tInclusao == "ju"){cadastrarPessoaJuridica(pessoaFisicaJuridicaDAO, scanner);}
-                        
-                        break;
-                   
+                        else if (tInclusao == "J" | tInclusao == "ju"){cadastrarPessoaJuridica(pessoaFisicaJuridicaDAO, scanner);}                        
+                        break;                
                     case 2:
                         alterarPessoa(pessoaFisicaDAO, pessoaJuridicaDAO, scanner);
                         break;
                     case 3:
                         excluirPessoa(pessoaFisicaDAO, pessoaJuridicaDAO, scanner);
                         break;
-
                     case 4:
                         buscarPeloId(pessoaFisicaDAO, pessoaJuridicaDAO, scanner);
                         break; 
@@ -61,24 +57,19 @@ public class cadastroBDTeste {
                     case 5:
                         exibirTodos(pessoaFisicaDAO, pessoaJuridicaDAO);
                         break;  
-
                     case 6:
                         exibirPessoaFisica(pessoaFisicaDAO);
                         break; 
-
                     case 7:
                          exibirPessoaJuridica(pessoaFisicaDAO, pessoaJuridicaDAO, scanner);
                         break; 
-
                     case 0:
                         System.out.println("Encerrando o programa. Volte sempre que precisar!!!");
                         break; 
                     default: System.out.println("Ops... Opção inválida. Tente novamente!");   
-
                 }  catch(SQLException exception){
                     System.out.println("Ops... Erro no Banco de Dados: " + exception.getMessage());
                     exception.printStackTrace();}
-
                 while (opcao != 0);
             }
         } 
